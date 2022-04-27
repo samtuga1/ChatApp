@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewMessage extends StatefulWidget {
   const NewMessage({Key? key}) : super(key: key);
@@ -16,7 +15,7 @@ class _NewMessageState extends State<NewMessage> {
   void _sendMessage() async {
     FocusScope.of(context).unfocus();
     User? user = FirebaseAuth.instance.currentUser;
-    final userName = await FirebaseFirestore.instance
+    final userData = await FirebaseFirestore.instance
         .collection('users')
         .doc(user!.uid)
         .get();
@@ -24,7 +23,8 @@ class _NewMessageState extends State<NewMessage> {
       'text': _enteredMessage,
       'createdAt': Timestamp.now(),
       'userId': user.uid,
-      'username': userName['username']
+      'username': userData['username'],
+      'image_url': userData['image_url'],
     });
     _controller.clear();
   }
