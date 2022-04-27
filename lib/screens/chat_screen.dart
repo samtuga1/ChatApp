@@ -1,3 +1,5 @@
+import 'package:chat_app/widgets/messages.dart';
+import 'package:chat_app/widgets/new_message.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,7 +27,7 @@ class ChatScreen extends StatelessWidget {
                       const SizedBox(
                         width: 8,
                       ),
-                      Text('Logout')
+                      const Text('Logout')
                     ],
                   ),
                 )
@@ -37,32 +39,13 @@ class ChatScreen extends StatelessWidget {
               })
         ],
       ),
-      body: StreamBuilder<dynamic>(
-          stream: FirebaseFirestore.instance
-              .collection('chats/toyAQ777k3LI3nqt1V65/messages')
-              .snapshots(),
-          builder: (ctx, streamSnapshot) {
-            if (streamSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            final documents = streamSnapshot.data.docs;
-            return ListView.builder(
-              itemCount: documents.length,
-              itemBuilder: (ctx, index) => Container(
-                padding: const EdgeInsets.all(10),
-                child: Text(documents[index]['text']),
-              ),
-            );
-          }),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection('chats/toyAQ777k3LI3nqt1V65/messages')
-              .add({'text': 'Another'});
-        },
+      body: Column(
+        children: const [
+          Expanded(
+            child: Messages(),
+          ),
+          NewMessage()
+        ],
       ),
     );
   }
